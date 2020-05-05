@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h3>manu</h3>
+        <button id="clearBtn">clear</button>
+    </div>
+    <div>
+        <h1>ffmpeg bat　出力</h1>
+        start_time<input type="text" name="" id="start_time1">
+        <br>
+        duration<input type="text" name="" id="duration">
+        <br>
+        input<input type="text" name="" id="inputfile">
+        <br>
+        <!-- output<input type="text" name="" id="outputfile"> -->
+        
+        <br>
+        <button id="btn">send</button>
+    </div>
+    <div>
+        
+        <textarea name="" id="outcmd" cols="90" rows="20"></textarea>
+        
+        <button id="copyBtn">copy</button>
+    </div>
+
+    <div>
+        <h1>秒数計算機</h1>
+        H : <input type="text" name="" id="h"><br>
+        M : <input type="text" name="" id="m"><br>
+        S : <input type="text" name="" id="s"><br>
+        <button id="calcBtn">calc</button><br>
+        SUM : <input type="text" name="" id="hmsSum">
+    </div>
+
+</body>
+<script>
+let cmdtxt = ""
+let cutNum = 1;
+document.getElementById("btn").onclick = function(){
+    // console.log("btn on click");
+    var st_1 = document.getElementById("start_time1").value;
+    var d_1 = document.getElementById("duration").value;
+    var input = document.getElementById("inputfile").value;
+    // var output = document.getElementById("outputfile").value;
+    output = input + "_cut_0" + String(cutNum);
+    cutNum++;
+
+    if(st_1 == ""){
+        st_1 = 0;
+    }
+    if(d_1 == ""){
+        d_1 = 0;
+    }
+    if(input == ""){
+        input = "INPUT FILE NAME";
+    }
+
+    
+
+    let template = "ffmpeg -ss " + st_1 + " -i " + input + ".mp4 -ss 0 -t " + d_1 + " -c:v copy -c:a copy -async 1 -strict -2 " + output + ".mp4\n\n"
+    cmdtxt += template;
+    document.getElementById("outcmd").value=cmdtxt
+}
+
+document.getElementById("copyBtn").onclick = function(){
+    document.getElementById("outcmd").select();
+    document.execCommand("copy");
+}
+
+document.getElementById("calcBtn").onclick = function(){
+    let h =document.getElementById("h").value;
+    let m =document.getElementById("m").value;
+    let s =document.getElementById("s").value;
+
+    if(h == "")h = 0;
+    if(m == "")m = 0;
+    if(s == "")s = 0;
+
+    let sum = Number(h * 60 * 60) + Number(m * 60) + Number(s);
+    document.getElementById("hmsSum").value=sum;
+}
+
+document.getElementById("clearBtn").onclick = function(){
+    cutNum = 1;
+    cmdtxt = "";
+    document.getElementById("outcmd").value=""
+}
+</script>
+</html>
